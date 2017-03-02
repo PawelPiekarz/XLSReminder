@@ -13,8 +13,6 @@ recipient_mail = 'recipient@gmail.com'
 
 
 def find_task(file):
-    # open xls file, find value
-    # path parameter should point xls file
     xls = openpyxl.load_workbook(filename=file)
     sheet = xls.get_sheet_by_name('Arkusz1')
     delta = 5
@@ -48,11 +46,8 @@ def send_message(task):
     msg.attach(MIMEText(message))
 
     mailserver = smtplib.SMTP('smtp.gmail.com', 587)
-    # identify ourselves to smtp gmail client
     mailserver.ehlo()
-    # secure our email with tls encryption
     mailserver.starttls()
-    # re-identify ourselves as an encrypted connection
     mailserver.ehlo()
     mailserver.login(sender_mail, password)
 
