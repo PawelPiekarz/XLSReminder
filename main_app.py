@@ -12,9 +12,6 @@ password = 'your_password'
 recipient_mail = 'recipient@gmail.com'
 
 
-
-
-
 def find_task(file):
     # open xls file, find value
     # path parameter should point xls file
@@ -34,9 +31,6 @@ def find_task(file):
         xls.save(filename=file)
     except PermissionError:
         print("I can't save it, check if file is closed")
-
-
-
 
 
 def send_message(task):
@@ -66,7 +60,9 @@ def send_message(task):
 
     mailserver.quit()
 
-
-path = "test.xlsx"
-my_task = find_task(path)
+    
+    
+if __name__ == "__main__":
+    path = "test.xlsx"
+    my_task = find_task(path)
 
