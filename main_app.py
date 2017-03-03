@@ -6,13 +6,18 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-sender_mail = 'sender@gmail.com'
-password = 'your_password'
+sender_mail = ''
+password = ''
 
-recipient_mail = 'recipient@gmail.com'
+recipient_mail = ''
+
+
+
 
 
 def find_task(file):
+    # open xls file, find value
+    # path parameter should point xls file
     xls = openpyxl.load_workbook(filename=file)
     sheet = xls.get_sheet_by_name('Arkusz1')
     delta = 5
@@ -22,8 +27,9 @@ def find_task(file):
         if sheet.cell(row=row_index, column=2).value >= date_min and sheet.cell(row=row_index, column=2).value <= date_max:
             if not sheet.cell(row=row_index, column=3).value == 1:
                 task = sheet.cell(row=row_index, column=1).value
+                deadline = sheet.cell(row=row_index, column=2).value
                 print(task)
-                send_message(task)
+                send_message(task, deadline)
                 sheet.cell(row=row_index, column=3).value = 1
     try:
         xls.save(filename=file)
@@ -31,23 +37,29 @@ def find_task(file):
         print("I can't save it, check if file is closed")
 
 
-def send_message(task):
+
+
+
+def send_message(task,deadline):
     msg = MIMEMultipart()
     msg['From'] = sender_mail
     msg['To'] = recipient_mail
     msg['Subject'] = 'Task reminder'
     message = """
     Hi!
-    I found that you have a new task:
-    {}
+    I found that your task: {} 
+    is close to it's deadline:  {}
 
     Thank You!
-    """.format(task)
+    """.format(task, deadline.strftime("%d/%m/%y"))
     msg.attach(MIMEText(message))
 
     mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+    # identify ourselves to smtp gmail client
     mailserver.ehlo()
+    # secure our email with tls encryption
     mailserver.starttls()
+    # re-identify ourselves as an encrypted connection
     mailserver.ehlo()
     mailserver.login(sender_mail, password)
 
@@ -55,9 +67,7 @@ def send_message(task):
 
     mailserver.quit()
 
-    
-    
 if __name__ == "__main__":
     path = "test.xlsx"
-    my_task = find_task(path)
+    find_task(path)
 
