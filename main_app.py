@@ -8,11 +8,7 @@ from email.mime.text import MIMEText
 
 sender_mail = ''
 password = ''
-
 recipient_mail = ''
-
-
-
 
 
 def find_task(file):
@@ -35,9 +31,6 @@ def find_task(file):
         xls.save(filename=file)
     except PermissionError:
         print("I can't save it, check if file is closed")
-
-
-
 
 
 def send_message(task,deadline):
@@ -66,6 +59,7 @@ def send_message(task,deadline):
     mailserver.sendmail(sender_mail, recipient_mail, msg.as_string())
 
     mailserver.quit()
+
 
 if __name__ == "__main__":
     path = "test.xlsx"
